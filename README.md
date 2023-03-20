@@ -1,6 +1,8 @@
 # Electron-Vue-Element
  Scaffold for quick start and build with base facilities
 
+create by [vue-cli]() 
+
 ## Configured
 + [Electron](https://www.electronjs.org/) v21.1.0
 + [Vue3](https://cn.vuejs.org/) js v3.2
@@ -10,7 +12,11 @@
 ```
 $ cd demo
 $ npm install
-$ npm run electron:serve | electron:build
+$ npm run electron:serve
+```
+build 
+```
+$ npm run electron:build
 ```
 
 ## Provided
