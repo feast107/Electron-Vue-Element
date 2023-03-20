@@ -1,4 +1,4 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
-contextBridge.exposeInMainWorld("name", {});
+contextBridge.exposeInMainWorld("variableName", {});
 window.onload = function () {};
