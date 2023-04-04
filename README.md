@@ -4,17 +4,26 @@
 create by [vue-cli](https://cli.vuejs.org/) 
 
 ## Configured
++ [Node.js](https://nodejs.org/en) v16.x :warning: No higher
 + [Electron](https://www.electronjs.org/) v21.1.0
 + [Vue3](https://cn.vuejs.org/) js v3.2
-+ [Element-plus](https://element-plus.org/) V2.2.29
++ [Element-plus](https://element-plus.org/) V2.2.29  
+
+## Prepare
+Make sure install [Node.js v16.x](https://nodejs.org/dist/latest-v16.x/) 
+``` bash
+$ npm install -g electron
+$ npm install -g electron-builder
+$ npm install -g @vue/cli
+```
 
 ## Start
-```
+``` bash
 $ cd demo
 $ npm install
 $ npm run electron:serve
 ```
-build 
+### Build 
 ```
 $ npm run electron:build
 ```
