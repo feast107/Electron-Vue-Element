@@ -21,9 +21,9 @@ export default {
     },
     created() {
         this.blueTooth.onBlueTooth(this.handler);
+        this.blueTooth.offBlueTooth(this.handler);
     },
     unmounted() {
-        this.blueTooth
     },
     data() {
         return {
