@@ -40,10 +40,10 @@ export default {
         },
         scan() {
             navigator
-            .bluetooth
-            .requestDevice({ acceptAllDevices: true })
-            .then(r=>{ console.log(r) })
-            .catch(e=>{ console.error(e) })
+                .bluetooth
+                .requestDevice({ acceptAllDevices: true })
+                .then(r => { console.log(r) })
+                .catch(e => { console.error(e) })
         },
         select(device) {
             console.log(`You select ${device.deviceName}`)
