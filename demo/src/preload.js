@@ -24,10 +24,13 @@ const BlueTooth = {
     onBlueTooth(handler) {
         ipcRenderer.on("blueTooth-list", handler);
     },
-    offBlueTooth() {
-        ipcRenderer.off("blueTooth-list");
-    }
-}
+    /**
+     * 取消监听
+     */
+    offBlueTooth(handler) {
+        ipcRenderer.off("blueTooth-list", handler);
+    },
+};
 
 contextBridge.exposeInMainWorld("blueTooth", BlueTooth);
 window.onload = function () {};
