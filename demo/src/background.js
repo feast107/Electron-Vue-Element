@@ -1,6 +1,6 @@
 "use strict";
 
-import { app, protocol, BrowserWindow } from "electron";
+import { app, protocol, BrowserWindow , ipcMain } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
 import path from 'path'
@@ -40,6 +40,37 @@ async function createWindow() {
         // Load the index.html when not in development
         win.loadURL("app://./index.html");
     }
+
+    let isConnecting = false;
+    win.webContents.on(
+        "select-bluetooth-device",
+        (event, deviceList, callback) => {
+            event.preventDefault();
+            if (!isConnecting) {
+                isConnecting = true;
+                let connectHandler = () => {};
+                let cancelHandler = () => {};
+                connectHandler = (e, ...args) => {
+                    console.log(...args);
+                    ipcMain.off("select-blueTooth", connectHandler);
+                    ipcMain.off("cancel-blueTooth", cancelHandler);
+                    isConnecting = false;
+                    callback(args[0]);
+                };
+                cancelHandler = (e, _) => {
+                    ipcMain.off("select-blueTooth", connectHandler);
+                    ipcMain.off("cancel-blueTooth", cancelHandler);
+                    isConnecting = false;
+                    callback("");
+                };
+                ipcMain.on("select-blueTooth", connectHandler);
+                ipcMain.on("cancel-blueTooth", cancelHandler);
+            }
+            if (deviceList && deviceList.length > 0) {
+                win.webContents.send("blueTooth-list", deviceList);
+            }
+        }
+    );
 }
 
 // Quit when all windows are closed.
