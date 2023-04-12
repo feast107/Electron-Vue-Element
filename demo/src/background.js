@@ -54,16 +54,15 @@ async function createWindow() {
                 let selected = () => {};
                 let cancelled = () => {};
                 let off = () => {
+                    isConnecting = false;
                     ipcMain.off("select-blueTooth", selected);
                     ipcMain.off("cancel-blueTooth", cancelled);
                 };
                 selected = (e, ...args) => {
-                    isConnecting = false;
                     off();
                     callback(args[0]);
                 };
                 cancelled = (e, _) => {
-                    isConnecting = false;
                     off();
                     callback("");
                 };
