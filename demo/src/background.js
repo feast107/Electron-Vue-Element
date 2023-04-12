@@ -1,9 +1,9 @@
 "use strict";
 
-import { app, protocol, BrowserWindow , ipcMain } from "electron";
+import { app, protocol, BrowserWindow, ipcMain, ipcRenderer } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
-import path from 'path'
+import path from "path";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 // Scheme must be registered before the app is ready
@@ -42,31 +42,38 @@ async function createWindow() {
     }
 
     let isConnecting = false;
+    /**
+     * 当触发 @type {navigator.blueTooth.requestDevice(...)}
+     */
     win.webContents.on(
         "select-bluetooth-device",
         (event, deviceList, callback) => {
             event.preventDefault();
             if (!isConnecting) {
                 isConnecting = true;
-                let connectHandler = () => {};
-                let cancelHandler = () => {};
-                connectHandler = (e, ...args) => {
-                    console.log(...args);
-                    ipcMain.off("select-blueTooth", connectHandler);
-                    ipcMain.off("cancel-blueTooth", cancelHandler);
+                let selected = () => {};
+                let cancelled = () => {};
+                let off = () => {
+                    ipcMain.off("select-blueTooth", selected);
+                    ipcMain.off("cancel-blueTooth", cancelled);
+                };
+                selected = (e, ...args) => {
                     isConnecting = false;
+                    off();
                     callback(args[0]);
                 };
-                cancelHandler = (e, _) => {
-                    ipcMain.off("select-blueTooth", connectHandler);
-                    ipcMain.off("cancel-blueTooth", cancelHandler);
+                cancelled = (e, _) => {
                     isConnecting = false;
+                    off();
                     callback("");
                 };
-                ipcMain.on("select-blueTooth", connectHandler);
-                ipcMain.on("cancel-blueTooth", cancelHandler);
+
+                `当${ipcMain}接收到选择或者取消`;
+                ipcMain.on("select-blueTooth", selected);
+                ipcMain.on("cancel-blueTooth", cancelled);
             }
             if (deviceList && deviceList.length > 0) {
+                `通过${ipcMain}吧蓝牙列表发送给${ipcRenderer}`;
                 win.webContents.send("blueTooth-list", deviceList);
             }
         }
